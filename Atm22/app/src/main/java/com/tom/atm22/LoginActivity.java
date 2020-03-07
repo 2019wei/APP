@@ -3,8 +3,14 @@ package com.tom.atm22;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
@@ -20,6 +26,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
     private static final String TAG = MainActivity.class.getSimpleName();
+    private static final int REQUEST_CODE_CAMERA = 5;
     private EditText edUserid;
     private EditText edPassword;
     private CheckBox cbRemember;
@@ -29,6 +36,13 @@ public class LoginActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        int permission =  ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA);
+        if(permission == PackageManager.PERMISSION_GRANTED){
+//            takePhoto();
+        }else {
+            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.CAMERA},REQUEST_CODE_CAMERA);
+        }
+
         getSharedPreferences("atm",MODE_PRIVATE)
                 .edit()
                 .putInt("LEVEL",3)
@@ -61,6 +75,22 @@ public class LoginActivity extends AppCompatActivity {
          }
 
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_CODE_CAMERA){
+            if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                takePhoto();
+            }
+        }
+    }
+
+    private void takePhoto() {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivity(intent);
+    }
+
     public void  login(View view){
             final String userid = edUserid.getText().toString();
             final String passwd = edPassword.getText().toString();
