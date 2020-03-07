@@ -14,5 +14,6 @@ public class LoopActivity extends AppCompatActivity {
         TextView result = findViewById(R.id.textname);
         String name =  getIntent().getStringExtra("Name");
         result.setText(name);
+        //
     }
 }
