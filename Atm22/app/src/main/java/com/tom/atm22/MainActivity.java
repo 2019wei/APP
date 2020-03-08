@@ -119,8 +119,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
                 break;
             case R.drawable.func_contacts:
-                intent.putExtra("Name",function.getName());
-                startActivity(intent);
+                Intent contacts = new Intent(this,ContactActivity.class);
+                startActivity(contacts);
                 break;
             case R.drawable.func_exit:
                 finish();

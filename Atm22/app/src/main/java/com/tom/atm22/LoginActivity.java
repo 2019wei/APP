@@ -81,7 +81,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == REQUEST_CODE_CAMERA){
             if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                takePhoto();
+                //takePhoto();
             }
         }
     }
