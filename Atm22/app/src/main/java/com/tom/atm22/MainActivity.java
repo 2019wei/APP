@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.graphics.drawable.Icon;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -115,8 +116,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
                 break;
             case R.drawable.func_finances:
-                intent.putExtra("Name",function.getName());
-                startActivity(intent);
+                startActivity(new Intent(this,FinanceActivity.class));
                 break;
             case R.drawable.func_contacts:
                 Intent contacts = new Intent(this,ContactActivity.class);
