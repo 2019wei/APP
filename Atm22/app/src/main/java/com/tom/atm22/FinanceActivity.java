@@ -38,7 +38,7 @@ public class FinanceActivity extends AppCompatActivity {
                 }
             }
         });
-
+//
 //        new Thread(new Runnable() {
 //            @Override
 //            public void run() {
