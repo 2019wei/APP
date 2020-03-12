@@ -108,8 +108,8 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this,LoopActivity.class);
         switch (function.getIcon()){
             case R.drawable.func_transaction:
-                intent.putExtra("Name",function.getName());
-                startActivity(intent);
+                //intent.putExtra("Name",function.getName());
+                startActivity(new Intent(this,TransActivity.class));
                 break;
             case  R.drawable.func_balance:
                 intent.putExtra("Name",function.getName());
