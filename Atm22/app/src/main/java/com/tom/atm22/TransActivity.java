@@ -1,10 +1,19 @@
 package com.tom.atm22;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -29,11 +38,17 @@ import okhttp3.Response;
 public class TransActivity extends AppCompatActivity {
 
     private static final String TAG = TransActivity.class.getSimpleName();
+    private RecyclerView recyclerView;
+    private List<Transaction> transactions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trans);
+        recyclerView = findViewById(R.id.recycler);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
         // http://atm201605.appspot.com/h
         new TransTask().execute("http://atm201605.appspot.com/h");
         OkHttpClient client = new OkHttpClient();
@@ -46,15 +61,31 @@ public class TransActivity extends AppCompatActivity {
 
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                Log.d(TAG, "onResponse: " + response.body().string());
-                parseJSON(response.body().string());
+                final String json = response.body().string();
+                Log.d(TAG, "onResponse: " + json);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+//                        parseJSON(json);
+                        parseGSON(json);
+
+                    }
+                });
             }
         });
 
     }
 
+    private void parseGSON(String json) {
+        Gson gson = new Gson();
+        transactions = gson.fromJson(json,
+                new TypeToken<ArrayList<Transaction>>(){}.getType());
+        TransAdapter adapter = new TransAdapter();
+        recyclerView.setAdapter(adapter);
+    }
+
     private void parseJSON(String json) {
-        List<Transaction> transactions = new ArrayList<>();
+        transactions = new ArrayList<>();
         try {
             JSONArray array = new JSONArray(json);
             for (int i = 0; i < array.length(); i++) {
@@ -65,8 +96,48 @@ public class TransActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        TransAdapter adapter = new TransAdapter();
+        recyclerView.setAdapter(adapter);
     }
+    public  class TransAdapter  extends RecyclerView.Adapter<TransAdapter.TransHolder> {
 
+        @NonNull
+        @Override
+        public TransHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View view = getLayoutInflater().inflate(R.layout.item_transactions,parent,false);
+            return new TransHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull TransHolder holder, int position) {
+            Transaction tran = transactions.get(position);
+            holder.bindTo(tran);
+
+        }
+
+        @Override
+        public int getItemCount() {
+            return transactions.size();
+        }
+
+        public class TransHolder extends RecyclerView.ViewHolder{
+            TextView dateText;
+            TextView amountText;
+            TextView typeText;
+            public TransHolder(@NonNull View itemView) {
+                super(itemView);
+                dateText = itemView.findViewById(R.id.item_date);
+                amountText = itemView.findViewById(R.id.item_amount);
+                typeText = itemView.findViewById(R.id.item_type);
+            }
+
+            public void bindTo(Transaction tran) {
+                dateText.setText(tran.getDate());
+                amountText.setText(String.valueOf(tran.getAmount())  );
+                typeText.setText(String.valueOf(tran.getType()) );
+            }
+        }
+    }
 
     public class TransTask extends AsyncTask<String,Void,String>{
 
