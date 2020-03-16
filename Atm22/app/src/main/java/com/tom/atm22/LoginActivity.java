@@ -49,6 +49,8 @@ public class LoginActivity extends AppCompatActivity {
         FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = manager.beginTransaction();
         fragmentTransaction.add(R.id.container_news,NewsFragment.getInstance());
+//        fragmentTransaction.add(R.id.container_news,new NewsFragment());
+        fragmentTransaction.add(R.id.blank_news,BlankFragment.newInstance("",""));
         fragmentTransaction.commit();
 //        camera();
 
