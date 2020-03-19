@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/holo_orange_light"
-        android:text="公告更新中"
+        android:text="公告更新中~啾咪"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
 </FrameLayout>

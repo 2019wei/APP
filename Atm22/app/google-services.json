@@ -89,11 +89,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "343351488695-ai84miktcoitapbbm2a2o17078dm7djk.apps.googleusercontent.com",
+          "client_id": "343351488695-ks0j6kd8l619s7jous6509d1fo7dnrrq.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.tom.atm22",
-            "certificate_hash": "7428348cc37db60641d664582877372ae8ec2d49"
+            "certificate_hash": "3d173fc8c6f7e3038f2da1ad82bc412a3ce9c890"
           }
         },
         {

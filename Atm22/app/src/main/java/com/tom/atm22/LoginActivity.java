@@ -71,6 +71,10 @@ public class LoginActivity extends AppCompatActivity {
         new TestTask().execute("http://tw.yahoo.com");
     }
 
+    public void map(View view){
+        startActivity(new Intent(this,MapsActivity.class));
+    }
+
     BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
