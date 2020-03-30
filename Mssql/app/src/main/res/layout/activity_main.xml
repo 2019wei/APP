@@ -31,4 +31,13 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.6" />
 
+    <ListView
+        android:id="@+id/Listviews"
+        android:layout_width="409dp"
+        android:layout_height="242dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Btn" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

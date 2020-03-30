@@ -69,7 +69,6 @@ public class MainActivity extends AppCompatActivity {
             while(rs.next()){
                 list.add(rs.getString(1)+rs.getString(2));
             }
-
             st.close();
             c.close();
         }
