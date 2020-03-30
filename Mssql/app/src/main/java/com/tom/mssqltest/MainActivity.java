@@ -78,6 +78,12 @@ public class MainActivity extends AppCompatActivity {
             throw new Exception("更新失敗");
         }finally {
             handler.sendEmptyMessage(0);
+//            runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    listadapter.notifyDataSetChanged();
+//                }
+//            });
             m_con.close();
         }
 
