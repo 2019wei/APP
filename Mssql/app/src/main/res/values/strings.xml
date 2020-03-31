@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">MssqlTest</string>
+    <string name="progressbar">Progressbar</string>
 </resources>
