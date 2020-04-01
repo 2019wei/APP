@@ -4,6 +4,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -12,12 +13,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
+import pl.droidsonroids.gif.GifDrawable;
+import pl.droidsonroids.gif.GifImageView;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -26,6 +31,8 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Data> list;
     private Listadapter listadapter;
     private ProgressDialog progressD;
+    private GifImageView gifImageView;
+    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,10 +53,36 @@ public class MainActivity extends AppCompatActivity {
         progressD.setCancelable(false);
         progressD.setIndeterminate(false);
         progressD.setMax(100);
+        //GIF
+        gifImageView = findViewById(R.id.imageView);
+        try {
+            GifDrawable gifDrawable = new GifDrawable(getResources(),R.drawable.pic);
+            gifImageView.setImageDrawable(gifDrawable);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-
-
+        intent = new Intent(MainActivity.this,Main2Activity.class);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(5000);
+                    startActivity(intent);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume: " + "開啟");
+    }
+
+
     public void Bsql(View view){
         progressD.show();
         new Thread(new Runnable() {
