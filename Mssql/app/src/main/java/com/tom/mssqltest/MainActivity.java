@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
         progressD.setCancelable(false);
         progressD.setIndeterminate(false);
         progressD.setMax(100);
-        //GIF
+        //GIF 動態圖   implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.19'
         gifImageView = findViewById(R.id.imageView);
         try {
             GifDrawable gifDrawable = new GifDrawable(getResources(),R.drawable.pic);
@@ -61,19 +61,20 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        //延遲毫秒轉換
 
-        intent = new Intent(MainActivity.this,Main2Activity.class);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(5000);
-                    startActivity(intent);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
+//        intent = new Intent(MainActivity.this,Main2Activity.class);
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                try {
+//                    Thread.sleep(5000);
+//                    startActivity(intent);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }).start();
     }
 
     @Override
@@ -112,11 +113,13 @@ public class MainActivity extends AppCompatActivity {
         }
         try {
             list.clear();
+//            pstmt = m_con.prepareStatement(sql);
 
             pstmt = m_con.prepareStatement(sql,ResultSet.TYPE_SCROLL_INSENSITIVE,
                     ResultSet.CONCUR_READ_ONLY);
            //須設定ResultSet的Type ， 这是默认的，它是ResultSet.TYPE_FORWARD_ONLY，这意味着你只能使用rs.next()
-            //
+            // 若要使用last().等其他的ResultSet方法 需要加上ResultSet的Type
+            // 沒有加ResultSet的Type會報錯 E/Exception: ResultSet may only be accessed in a forward direction.
             ResultSet rs = pstmt.executeQuery();
 
             rs.last();
