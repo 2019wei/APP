@@ -13,6 +13,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -21,6 +26,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import pl.droidsonroids.gif.GifDrawable;
 import pl.droidsonroids.gif.GifImageView;
 
@@ -33,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
     private ProgressDialog progressD;
     private GifImageView gifImageView;
     private Intent intent;
+    private String json;
+    private ArrayList<Transaction> transactions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         //延遲毫秒轉換
-
+//        https://atm201605.appspot.com/h
 //        intent = new Intent(MainActivity.this,Main2Activity.class);
 //        new Thread(new Runnable() {
 //            @Override
@@ -75,6 +87,28 @@ public class MainActivity extends AppCompatActivity {
 //                }
 //            }
 //        }).start();
+
+        //OKhttp
+        OkHttpClient client = new OkHttpClient();
+        final Request request = new Request.Builder().url("https://atm201605.appspot.com/h").build();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                json = response.body().string();
+                Log.d(TAG, "onResponse: " );
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        parserGSON(json);
+                    }
+                });
+            }
+        });
     }
 
     @Override
@@ -99,6 +133,16 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
+    private void parserGSON(String json) {
+        Gson gson = new Gson();
+        transactions = new ArrayList<>();
+        transactions = gson.fromJson(json,
+                new TypeToken<ArrayList<Transaction>>(){}.getType());
+        Log.d(TAG, "parserGSON: " + transactions);
+
+    }
+
     public void insert(String a ,String b) throws Exception {
         Connection m_con =null;
         String sql = "SELECT * from [KaiShingPlug].[dbo].[TEST1203] " ;
