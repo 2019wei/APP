@@ -1,5 +1,6 @@
 package com.tom.mssqltest;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +30,7 @@ public Listadapter(ArrayList list){
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
             convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.listviewlayout,parent,false);
             String name =list.get(position).getName();
             String id =list.get(position).getId();
@@ -37,6 +38,14 @@ public Listadapter(ArrayList list){
         TextView idText = convertView.findViewById(R.id.textView2);
         nameText.setText(name);
         idText.setText(id);
+        convertView.setOnClickListener(new View.OnClickListener() {
+            private final String TAG = Listadapter.class.getSimpleName();
+
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "onClick: "+list.get(position).getName());
+            }
+        });
         return convertView;
     }
 }

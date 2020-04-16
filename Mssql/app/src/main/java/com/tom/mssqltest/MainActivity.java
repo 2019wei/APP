@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 
+import com.facebook.stetho.Stetho;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -87,20 +88,21 @@ public class MainActivity extends AppCompatActivity {
 //                }
 //            }
 //        }).start();
-
+//http://127.0.0.1:7829/JSON/Index_JSON1
+        //
         //OKhttp
         OkHttpClient client = new OkHttpClient();
         final Request request = new Request.Builder().url("https://atm201605.appspot.com/h").build();
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-
+                Log.d(TAG, "onFailure: "+e.getMessage());
             }
 
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 json = response.body().string();
-                Log.d(TAG, "onResponse: " );
+                Log.d(TAG, "onResponse: ");
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -109,6 +111,16 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         });
+
+        //Sqlite3 檢查 chrome://inspect/#devices  // implementation 'com.facebook.stetho:stetho:1.5.1'
+        Stetho.initializeWithDefaults(this);
+
+
+    }
+
+    public void startB(View view){
+        Intent intent = new Intent(this,FinanceActivity.class);
+        startActivity(intent);
     }
 
     @Override
@@ -203,6 +215,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
 
 
 
