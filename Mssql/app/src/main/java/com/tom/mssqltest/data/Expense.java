@@ -18,6 +18,7 @@ public class Expense {
     @NonNull
     int amount;
 
+
     public Expense(@NonNull String date, @NonNull String info, int amount) {
         this.date = date;
         this.info = info;
