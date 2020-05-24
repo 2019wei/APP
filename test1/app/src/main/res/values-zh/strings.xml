@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">test1</string>
+    <string name="cal_bmi">身體重量指數</string>
+    <string name="height">身高</string>
+    <string name="help">說明</string>
+    <string name="ok">好的</string>
+    <string name="weight">重量</string>
+    <string name="you_bmi_is">你的BMI是</string>
+</resources>
