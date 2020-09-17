@@ -25,7 +25,7 @@ class HomePageProivder with ChangeNotifier{
     }).catchError((error){
       print(error);
       errorMsg = error;
-      isLoading =error;
+      isLoading =false;
       isError = true;
       notifyListeners();
     });
