@@ -18,7 +18,7 @@ class _HomePageState extends State<HomePage> {
     return ChangeNotifierProvider<HomePageProivder>(
       create: (context) {
         var provider = HomePageProivder();
-        provider.loagHomePageData();
+        provider.loadHomePageData();
         return provider;
       },
       child: Scaffold(

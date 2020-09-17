@@ -11,7 +11,7 @@ class HomePageProivder with ChangeNotifier{
   bool isError = false;
   String errorMsg = "";
 
-  loagHomePageData(){
+  loadHomePageData(){
      isLoading = true;
      isError = false;
      errorMsg ="";
