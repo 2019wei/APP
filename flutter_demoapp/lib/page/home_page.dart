@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flare_splash_screen/flare_splash_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_demoapp/config/jd_api.dart';
@@ -37,7 +38,8 @@ class _HomePageState extends State<HomePage> {
               // print(provider.isLoading);
               //加載動畫
               if (provider.isLoading) {
-                return Center(child: CupertinoActivityIndicator());
+                return
+                Center(child: CupertinoActivityIndicator());
               }
 
               //捕獲異常
@@ -65,6 +67,14 @@ class _HomePageState extends State<HomePage> {
                   buildAspercRatio(model),
                   //圖標分類
                   buildLogs(model),
+                  //掌上秒殺頭
+                  buildMSHeaderContainer(),
+                  //掌上秒殺
+                  buildMsBodyContainer(model),
+                  //廣告位
+                  buildAds(model.pageRow.ad1),
+                  //廣告位
+                  buildAds(model.pageRow.ad2),
                 ],
               );
               //return Container();
@@ -96,7 +106,7 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
         ),
-        onTap:()=> chagePage('${model.logos[i].title}',context),
+        onTap: () => chagePage('${model.logos[i].title}', context),
       ));
     }
 
@@ -128,7 +138,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  chagePage(String title,BuildContext context) {
+  chagePage(String title, BuildContext context) {
     Navigator.push(
         context,
         MaterialPageRoute(
@@ -136,6 +146,66 @@ class _HomePageState extends State<HomePage> {
                   title: title,
                 )));
   }
+
+  Container buildMSHeaderContainer() {
+    return Container(
+      margin: const EdgeInsets.only(top: 10),
+      padding: const EdgeInsets.all(10),
+      color: Colors.white,
+      height: 50,
+      child: Row(
+        children: [
+          Image.asset(
+            "assets/image/bej.png",
+            width: 90,
+            height: 20,
+          ),
+          Spacer(),
+          Text('更多秒殺'),
+          Icon(
+            CupertinoIcons.right_chevron,
+            size: 14,
+          )
+        ],
+      ),
+    );
+  }
+//廣告
+  Widget buildAds(List<String>ads){
+    List<Widget> list = [];
+    for(var i = 0 ; i<ads.length;i++){
+      list.add(
+        Expanded(child: Image.asset("assets${ads[i]}"),)
+      );
+    }
+    return Row(
+      children: list,
+    );
+  }
+
+ Container buildMsBodyContainer(HomePageModel model) {
+    return Container(
+      height: 120,
+      color: Colors.white,
+      child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: model.quicks.length,
+          itemBuilder: (context, index) {
+            return Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: Column(
+                children: [
+                  Image.asset(
+                    "assets${model.quicks[index].image}",
+                    width: 85,
+                    height: 85,
+                  ),Text("${model.quicks[index].price}",style: TextStyle(color: Colors.red ,fontSize: 16),)
+                ],
+              ),
+            );
+          }),
+    );
+ }
 }
 
 // NetRequest() async {
