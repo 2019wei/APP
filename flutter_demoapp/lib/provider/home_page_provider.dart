@@ -18,7 +18,7 @@ class HomePageProivder with ChangeNotifier{
     NetRequest().requestData(JdApi.HOME_PAGE).then((value){
       isLoading = false;
       if(value.code == 200){
-        print(value.data);
+        // print(value.data);
         model = HomePageModel.fromJson(value.data);
       }
       notifyListeners();

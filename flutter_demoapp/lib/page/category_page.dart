@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_demoapp/model/category_content_model.dart';
+import 'package:flutter_demoapp/page/product_list_page.dart';
 import 'package:flutter_demoapp/provider/category_page_provider.dart';
+import 'package:flutter_demoapp/provider/product_list_provider.dart';
 import 'package:provider/provider.dart';
 
 class CategoryPage extends StatefulWidget {
@@ -28,7 +30,7 @@ class _CategoryPageState extends State<CategoryPage> {
             builder: (_, provider, __) {
               // print(provider.isLoading);
               //加載動畫
-              if (provider.isLoading && provider.categoryNavList.length ==0) {
+              if (provider.isLoading && provider.categoryNavList.length == 0) {
                 return Center(child: CupertinoActivityIndicator());
               }
 
@@ -49,17 +51,22 @@ class _CategoryPageState extends State<CategoryPage> {
                   ),
                 );
               }
-              print(provider.categoryNavList);
+              // print(provider.categoryNavList);
               return Row(
                 children: [
                   //分類左側
                   buildNavLeftContainer(provider),
                   //分類右側
-                  Expanded(child:Stack(
-                    children: [buildCategoryContent(provider.catagoryContentList),
-                    provider.isLoading ?Center(child:CupertinoActivityIndicator()):Container()
-                    ],
-                  ) ,),
+                  Expanded(
+                    child: Stack(
+                      children: [
+                        buildCategoryContent(provider.catagoryContentList),
+                        provider.isLoading
+                            ? Center(child: CupertinoActivityIndicator())
+                            : Container()
+                      ],
+                    ),
+                  ),
                 ],
               );
             },
@@ -80,7 +87,7 @@ class _CategoryPageState extends State<CategoryPage> {
               child: Container(
                   height: 50,
                   color:
-                      provider.tabIndex == index ? Colors.amber : Colors.blue,
+                  provider.tabIndex == index ? Colors.amber : Colors.blue,
                   padding: const EdgeInsets.only(top: 15),
                   child: Text(
                     provider.categoryNavList[index],
@@ -130,6 +137,18 @@ class _CategoryPageState extends State<CategoryPage> {
           ),
           onTap: () {
             //前往商品
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context)
+            =>
+                ChangeNotifierProvider<ProductListProvider>(
+                  create: (context) {
+                    ProductListProvider provider = ProductListProvider();
+                    provider.loadProductList();
+                    return provider;
+                  }, child: Container(
+                  child: ProductListPage(
+                      title: contentList[i].desc[j].text),),
+                )));
           },
         ));
       }
