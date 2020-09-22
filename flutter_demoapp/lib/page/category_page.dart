@@ -139,16 +139,16 @@ class _CategoryPageState extends State<CategoryPage> {
             //前往商品
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (context)
-            =>
-                ChangeNotifierProvider<ProductListProvider>(
-                  create: (context) {
-                    ProductListProvider provider = ProductListProvider();
-                    provider.loadProductList();
-                    return provider;
-                  }, child: Container(
-                  child: ProductListPage(
-                      title: contentList[i].desc[j].text),),
-                )));
+                =>
+                    ChangeNotifierProvider<ProductListProvider>(
+                      create: (context) {
+                        ProductListProvider provider = ProductListProvider();
+                        provider.loadProductList();
+                        return provider;
+                      }, child: Container(
+                      child: ProductListPage(
+                          title: contentList[i].desc[j].text),),
+                    )));
           },
         ));
       }

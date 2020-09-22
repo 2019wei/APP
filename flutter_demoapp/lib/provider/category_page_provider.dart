@@ -46,7 +46,7 @@ class CategoryPageProivder with ChangeNotifier{
    var data = {'title':categoryNavList[index]};
    NetRequest().requestData(JdApi.CATEGORY_CONTENT,data: data,method: "post").then((value){
      isLoading = false;
-     print(value.data);
+     //print(value.data);
      if(value.data is List){
        for(var item in value.data){
          CatagoryContentModel tempModel = CatagoryContentModel.fromJson(item);

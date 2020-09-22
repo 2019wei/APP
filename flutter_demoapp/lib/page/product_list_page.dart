@@ -2,7 +2,10 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_demoapp/model/product_detail_model.dart';
 import 'package:flutter_demoapp/model/product_info_model.dart';
+import 'package:flutter_demoapp/page/product_detail_page.dart';
+import 'package:flutter_demoapp/provider/product_detail_provider.dart';
 import 'package:flutter_demoapp/provider/product_list_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -58,7 +61,22 @@ class _ProductListPageState extends State<ProductListPage> {
                     //展示
                     return InkWell(child: buildProductItem(model),onTap: (){
                       //前往商品
-                      print(model.title);
+                      // print(model.title);
+
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context)
+                          =>
+                              ChangeNotifierProvider<ProductDetailProvider>(
+                                create: (context) {
+                                  ProductDetailProvider provider = ProductDetailProvider();
+                                  provider.loadProduct(id:model.id);
+                                  return provider;
+                                }, child: Container(
+                                child: ProductDetailPage(id:model.id),),
+                              )));
+
+
+
                     },);
                   });
             },

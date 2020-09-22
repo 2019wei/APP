@@ -18,7 +18,7 @@ class ProductListProvider with ChangeNotifier{
     errorMsg ="";
     NetRequest().requestData(JdApi.PRODUCTIONS_LIST).then((value){
       isLoading = false;
-      print(value.data);
+      // print(value.data);
       if(value.code == 200 && value.data is List){
         for(var item in value.data){
           ProductinfoModel tmpModel = ProductinfoModel.fromJson(item);
