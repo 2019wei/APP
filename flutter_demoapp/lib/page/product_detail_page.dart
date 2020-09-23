@@ -169,6 +169,18 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         ),
         onTap: () {
           //選擇商品個數
+          return showModalBottomSheet(context: context,backgroundColor: , builder: (BuildContext context){
+            return Stack(
+              children: [
+                //頂部: 包含圖片 價格 和數量訊息
+
+                //中間: 數量 加減號
+
+                //底部: 加入購物車按鈕
+
+              ],
+            );
+          });
         },
       ),
     );
