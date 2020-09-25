@@ -2,11 +2,22 @@ import 'package:flare_splash_screen/flare_splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_demoapp/ch_state.dart';
 import 'package:flutter_demoapp/page/index_page.dart';
+import 'package:flutter_demoapp/provider/cart_provider.dart';
 import 'package:provider/provider.dart';
 
 main() {
-  runApp(ChangeNotifierProvider.value(
-    value: chState(),
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider.value(
+        value: chState(),
+      ),
+      ChangeNotifierProvider<CartProvider>(
+        create: (context){
+          CartProvider provider = new CartProvider();
+          return provider;
+        },
+      ),
+    ],
     child: MyApp(),
   ));
 }
