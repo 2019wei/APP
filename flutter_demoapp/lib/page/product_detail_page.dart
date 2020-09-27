@@ -116,7 +116,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 ),
                 onTap: () {
                   //購物車
-                  Provider.of<CartProvider>(context).addToCart(model.partData);
+
                 },
               ),
             ),
@@ -136,6 +136,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 ),
                 onTap: () {
                   //加入購物車
+                  Provider.of<CartProvider>(context,listen: false).addToCart(model.partData);
                 },
               ),
             )
@@ -323,7 +324,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                           ),
                           onTap: () {
                             //加入購物車
-
+                            Provider.of<CartProvider>(context,listen: false).addToCart(model.partData);
+                            Navigator.pop(context);
                           },
                         ),
                       )
