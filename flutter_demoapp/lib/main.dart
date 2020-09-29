@@ -14,6 +14,7 @@ main() {
       ChangeNotifierProvider<CartProvider>(
         create: (context){
           CartProvider provider = new CartProvider();
+          provider.getCartList();
           return provider;
         },
       ),

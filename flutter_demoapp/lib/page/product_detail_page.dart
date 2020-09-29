@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_demoapp/ch_state.dart';
 import 'package:flutter_demoapp/model/product_detail_model.dart';
 import 'package:flutter_demoapp/provider/cart_provider.dart';
 import 'package:flutter_demoapp/provider/product_detail_provider.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 class ProductDetailPage extends StatefulWidget {
@@ -73,12 +75,12 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     buildPayContainer(baitiaoTitle, model, provider),
 
                     //商品件數
-                    buildCountContainer(model,provider),
+                    buildCountContainer(model, provider),
                   ],
                 ),
 
                 //底部菜單
-                buildBottomPositioned(context,model)
+                buildBottomPositioned(context, model)
               ],
             );
           },
@@ -87,7 +89,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     );
   }
 
-  Positioned buildBottomPositioned(BuildContext context,ProductDetailModel model) {
+  Positioned buildBottomPositioned(
+      BuildContext context, ProductDetailModel model) {
     return Positioned(
       left: 0,
       right: 0,
@@ -106,7 +109,31 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.shopping_cart),
+                      Stack(
+                        children: [
+                          Container(
+                              width: 40,
+                              height: 30,
+                              child: Icon(Icons.shopping_cart)),
+                          Consumer<CartProvider>(
+                              builder: (_, cartProvider, __) {
+                            return Positioned(
+                              right: 0.0,
+                              child: cartProvider.getAllCount() > 0 ? Container(
+                                padding: EdgeInsets.all(2),
+                                decoration: BoxDecoration(
+                                    color: Colors.redAccent,
+                                    borderRadius: BorderRadius.circular(11.0)),
+                                child: Text(
+                                  "${cartProvider.getAllCount()}",
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 11),
+                                ),
+                              ) :Container() ,
+                            );
+                          })
+                        ],
+                      ),
                       Text(
                         "購物車",
                         style: TextStyle(fontSize: 13),
@@ -116,7 +143,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 ),
                 onTap: () {
                   //購物車
-
+                  //先回到頂層
+                  Navigator.popUntil(context, ModalRoute.withName("/"));
+                  //跳轉道購物車
+                  Provider.of<chState>(context,listen: false).changeCurrentIndex(2);
                 },
               ),
             ),
@@ -136,7 +166,13 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 ),
                 onTap: () {
                   //加入購物車
-                  Provider.of<CartProvider>(context,listen: false).addToCart(model.partData);
+                  Provider.of<CartProvider>(context, listen: false)
+                      .addToCart(model.partData);
+                  Fluttertoast.showToast(
+                      msg: "成功加入購物車",
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.CENTER,
+                      fontSize: 16);
                 },
               ),
             )
@@ -146,7 +182,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     );
   }
 
-  Container buildCountContainer(ProductDetailModel model,ProductDetailProvider provider) {
+  Container buildCountContainer(
+      ProductDetailModel model, ProductDetailProvider provider) {
     return Container(
       padding: EdgeInsets.all(10),
       decoration: BoxDecoration(
@@ -215,10 +252,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                 height: 10,
                               ),
                               Consumer<ProductDetailProvider>(
-                                builder: (_,tmpProvider, __) {
-                                  return Text("已選${model.partData.count}件");
-                                }
-                              )
+                                  builder: (_, tmpProvider, __) {
+                                return Text("已選${model.partData.count}件");
+                              })
                             ],
                           ),
                           Spacer(),
@@ -240,70 +276,68 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         margin: EdgeInsets.only(top: 90, bottom: 50),
                         padding: EdgeInsets.only(top: 40, left: 15),
                         child: Consumer<ProductDetailProvider>(
-                          builder: (_,tmpProvider,__) {
-                            return Row(
-                              children: [
-                                Text("數量"),
-                                Spacer(),
-                                InkWell(
-                                  child: Container(
-                                    width: 35,
-                                    height: 35,
-                                    color: Colors.white60,
-                                    child: Center(
-                                        child: Text(
-                                      "－",
-                                      style: TextStyle(
-                                          fontSize: 18, color: Color(0xFFB0B0B0)),
-                                    )),
-                                  ),
-                                  onTap: () {
-                                    //減號
-                                    int tmpcout = model.partData.count;
-                                    tmpcout--;
-                                    provider.changeProductCount(tmpcout);
-                                  },
-                                ),
-                                SizedBox(
-                                  width: 2,
-                                ),
-                                Container(
+                            builder: (_, tmpProvider, __) {
+                          return Row(
+                            children: [
+                              Text("數量"),
+                              Spacer(),
+                              InkWell(
+                                child: Container(
                                   width: 35,
                                   height: 35,
+                                  color: Colors.white60,
                                   child: Center(
-                                    child: Text("${model.partData.count}"),
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 2,
-                                ),
-                                InkWell(
-                                  child: Container(
-                                    width: 35,
-                                    height: 35,
-                                    color: Color(0xFFF7F7F7),
-                                    child: Center(
                                       child: Text(
-                                        "+",
-                                        style: TextStyle(fontSize: 18),
-                                      ),
+                                    "－",
+                                    style: TextStyle(
+                                        fontSize: 18, color: Color(0xFFB0B0B0)),
+                                  )),
+                                ),
+                                onTap: () {
+                                  //減號
+                                  int tmpcout = model.partData.count;
+                                  tmpcout--;
+                                  provider.changeProductCount(tmpcout);
+                                },
+                              ),
+                              SizedBox(
+                                width: 2,
+                              ),
+                              Container(
+                                width: 35,
+                                height: 35,
+                                child: Center(
+                                  child: Text("${model.partData.count}"),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 2,
+                              ),
+                              InkWell(
+                                child: Container(
+                                  width: 35,
+                                  height: 35,
+                                  color: Color(0xFFF7F7F7),
+                                  child: Center(
+                                    child: Text(
+                                      "+",
+                                      style: TextStyle(fontSize: 18),
                                     ),
                                   ),
-                                  onTap: () {
-                                    //加號
-                                    int tmpcout = model.partData.count;
-                                    tmpcout++;
-                                    provider.changeProductCount(tmpcout);
-                                  },
-                                )
-                              ],
-                            );
-                          }
-                        ),
+                                ),
+                                onTap: () {
+                                  //加號
+                                  int tmpcout = model.partData.count;
+                                  tmpcout++;
+                                  provider.changeProductCount(tmpcout);
+                                },
+                              )
+                            ],
+                          );
+                        }),
                       ),
 
                       //底部: 加入購物車按鈕
-
 
                       Positioned(
                         left: 0,
@@ -324,7 +358,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                           ),
                           onTap: () {
                             //加入購物車
-                            Provider.of<CartProvider>(context,listen: false).addToCart(model.partData);
+                            Provider.of<CartProvider>(context, listen: false)
+                                .addToCart(model.partData);
                             Navigator.pop(context);
                           },
                         ),
