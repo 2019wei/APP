@@ -12,6 +12,7 @@ class CartPage extends StatefulWidget {
 class _CartPageState extends State<CartPage> {
   // 保留一個sliable打開
   final SlidableController _slidableController = SlidableController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,13 +68,16 @@ class _CartPageState extends State<CartPage> {
                         child: Padding(
                           padding: EdgeInsets.only(left: 5, right: 5),
                           child: Image.asset(
-                            "assets/image/unselect.png",
+                            provider.isSelectAll
+                                ? "assets/image/selected.png"
+                                : "assets/image/unselect.png",
                             width: 20,
                             height: 20,
                           ),
                         ),
                         onTap: () {
-                          //選中
+                          //選中全選
+                          provider.changeSelectAll();
                         },
                       ),
                       Text(
@@ -135,9 +139,10 @@ class _CartPageState extends State<CartPage> {
             ),
           ),
           color: Colors.redAccent,
-          onTap:(){
+          onTap: () {
             //刪除
-
+            print('執行刪除');
+            provider.removeFromCart(provider.models[index].id);
           },
         )
       ],
@@ -147,13 +152,16 @@ class _CartPageState extends State<CartPage> {
             child: Padding(
               padding: EdgeInsets.only(left: 8),
               child: Image.asset(
-                "assets/image/unselect.png",
+                provider.models[index].isSelected
+                    ? "assets/image/selected.png"
+                    : "assets/image/unselect.png",
                 width: 20,
                 height: 20,
               ),
             ),
             onTap: () {
               //選中事件
+              provider.changeSelectId(provider.models[index].id);
             },
           ),
           Expanded(
@@ -214,6 +222,8 @@ class _CartPageState extends State<CartPage> {
                               ),
                               onTap: () {
                                 //減號
+                                provider.models[index].count -= 1;
+                                provider.addToCart(provider.models[index]);
                               },
                             ),
                             SizedBox(
@@ -243,6 +253,8 @@ class _CartPageState extends State<CartPage> {
                               ),
                               onTap: () {
                                 //加號
+                                provider.models[index].count += 1;
+                                provider.addToCart(provider.models[index]);
                               },
                             )
                           ],

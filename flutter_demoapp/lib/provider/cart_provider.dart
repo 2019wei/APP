@@ -1,17 +1,20 @@
+
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_demoapp/model/product_detail_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CartProvider with ChangeNotifier{
   List<PartData> models = [];
+  bool isSelectAll = false;
 
   Future<void> addToCart(PartData data) async{
     // print(data.toJson());
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     //存入緩存
-    //  List<String> list = [];
+    //   List<String> list = [];
     // list.add(json.encode(data.toJson()));
     // prefs.setStringList("cartInfo", list);
 
@@ -22,14 +25,15 @@ class CartProvider with ChangeNotifier{
     //先把緩存裡的數據取出來
     List<String> list = [];
     list = prefs.getStringList("cartInfo");
-
+    models.clear();
     //判斷取出的list有沒有東西
     if(list == null){
       print("緩存裡沒有任何商品數據");
+      list = [];
       // 講傳遞過來的數據存到緩存和數組中
       list.add(json.encode(data.toJson()));
       //存到緩存
-      prefs.setStringList("cartInfo", list);
+       prefs.setStringList("cartInfo", list);
       //更新本地數據
       models.add(data);
       //通知聽眾
@@ -99,15 +103,63 @@ void getCartList() async{
 //刪除商品
 void removeFromCart(String id) async {
     //從緩存中刪除
+  // print(models[0].id);
+  // print(id);
   SharedPreferences prefs = await SharedPreferences.getInstance();
   List<String> list = [];
   //取出緩存
   list = prefs.getStringList("cartInfo");
+  //遍歷緩存數據
   for(var i=0;i<list.length;i++){
     PartData tmpData = PartData.fromJson(json.decode(list[i]));
-    models.add(tmpData);
+    if(tmpData.id == id){
+      list.remove(list[i]);
+      // print('找到1');
+      break;
+    }
   }
+
+  //遍歷本地數據
+  for(var i=0;i<models.length;i++){
+    if(this.models[i].id == id){
+      this.models.remove(this.models[i]);
+      // print('找到2');
+      break;
+    }
+  }
+
+  //緩存重新賦值
+  prefs.setStringList("cartInfo", list);
+  notifyListeners();
+}
+//選中狀態
+void changeSelectId(String id){
+    int tmpCount = 0;
+    // print(id);
+  for(var i =0; i <this.models.length; i++){
+    if(id == this.models[i].id){
+      this.models[i].isSelected = !this.models[i].isSelected;
+    }
+    if(this.models[i].isSelected){
+      tmpCount++;
+    }
+  }
+  //如果tmpCount的個數 和 models.lenth 一致 那就是全選狀態
+    if(tmpCount == this.models.length){
+      this.isSelectAll = true;
+    }else{
+      this.isSelectAll = false;
+    }
+  notifyListeners();
 }
 
+//全選
+void changeSelectAll(){
+  isSelectAll = !isSelectAll;
+  for(var i = 0 ; i< this.models.length; i++){
+    this.models[i].isSelected = isSelectAll;
+  }
+  notifyListeners();
+}
 
 }
