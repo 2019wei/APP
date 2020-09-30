@@ -1,6 +1,7 @@
 
 import 'dart:convert';
 
+import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_demoapp/model/product_detail_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -54,6 +55,8 @@ class CartProvider with ChangeNotifier{
           isUpdated = true;
         }
 
+
+
         //放到數組中
         String tmpDataStr = json.encode(tmpData.toJson());
        tmpList.add(tmpDataStr);
@@ -69,6 +72,8 @@ class CartProvider with ChangeNotifier{
       }
       //存入緩存
       prefs.setStringList("cartInfo", tmpList);
+
+
 
       //通知聽眾
       notifyListeners();
@@ -161,5 +166,35 @@ void changeSelectAll(){
   }
   notifyListeners();
 }
+
+
+//統計合計金額
+String getAmount(){
+    String amountStr = "0.00";
+    for(var i = 0 ; i <this.models.length ; i++){
+      if(this.models[i].isSelected == true){
+        num price = this.models[i].count * NumUtil.getNumByValueStr(this.models[i].price,fractionDigits: 2);
+        num amount = NumUtil.getNumByValueStr(amountStr,fractionDigits: 2);
+        amountStr = NumUtil.add(amount, price).toString();
+      }
+    }
+
+    return amountStr;
+}
+
+//統計選中商品個數
+int getSelectedCount(){
+    int selectedCount = 0;
+    for(var i = 0 ; i<this.models.length; i++){
+      if(this.models[i].isSelected == true){
+        selectedCount++;
+      }
+    }
+
+    return selectedCount ;
+}
+
+
+
 
 }

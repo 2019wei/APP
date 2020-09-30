@@ -92,7 +92,7 @@ class _CartPageState extends State<CartPage> {
                         style: TextStyle(fontSize: 16),
                       ),
                       Text(
-                        "\$",
+                        "\$${provider.getAmount()}",
                         style: TextStyle(
                             fontSize: 16,
                             color: Colors.black38,
@@ -105,7 +105,7 @@ class _CartPageState extends State<CartPage> {
                         color: Colors.redAccent,
                         child: Center(
                           child: Text(
-                            "去結算()",
+                            "去結算(${provider.getSelectedCount()})",
                             style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.w500,
@@ -222,8 +222,10 @@ class _CartPageState extends State<CartPage> {
                               ),
                               onTap: () {
                                 //減號
-                                provider.models[index].count -= 1;
-                                provider.addToCart(provider.models[index]);
+                                if(provider.models[index].count >1){
+                                  provider.models[index].count -= 1;
+                                  provider.addToCart(provider.models[index]);
+                                }
                               },
                             ),
                             SizedBox(
